@@ -1,0 +1,9 @@
+#
+---
+- hosts: localhost
+  gather_facts: yes
+  vars:
+    - git_repo : https://github.com/mcfongtw/openjdk.git
+    - git_branch: jdk8u-cmake
+  roles:
+    - jdk8  

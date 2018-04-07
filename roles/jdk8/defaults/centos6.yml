@@ -1,0 +1,32 @@
+build_required_packages:
+  - git-core 
+  - zip 
+  - bzip2 
+  - unzip 
+  - tar 
+  - curl
+  - ccache 
+  - make 
+  - cmake 
+  - gcc 
+  - gcc-g++ 
+  - ibstdc++-devel 
+  - libstdc++-static 
+  - alsa-lib-devel 
+  - cups-devel 
+    #X11 header
+  - libX11-devel 
+  - libXext-devel 
+  - libXt-devel 
+  - libXrender-devel 
+  - libXtst-devel 
+  - libXi-devel 
+  - libjpeg-devel 
+  - giflib-devel 
+    # Freetype
+  - freetype-devel
+    # bootstrap jdk
+  - java-1.7.0-openjdk-devel
+  - rpm-build 
+  - gpg
+

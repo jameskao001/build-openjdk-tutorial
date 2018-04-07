@@ -1,0 +1,17 @@
+- name: " {{ ansible_distribution }} | Make sure the build required packages are installed"
+  yum:
+    name: "{{item}}"
+    state: present
+  with_items: "{{ build_required_packages }}"
+  become: yes
+  tags:
+    - installation
+
+- name: " {{ ansible_distribution }} | Git clone from {{git_branch_repo}}#{{git_branch_name}}"
+- git:
+    repo: "{{git_branch_repo}}"
+    dest: /tmp/openjdk
+    version: "{{git_branch_name}}"
+  become: yes
+  tags:
+    - installation

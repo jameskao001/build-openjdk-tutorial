@@ -1,0 +1,42 @@
+- name: " {{ ansible_distribution }} | Make sure the build required packages are installed"
+  apt:
+    pkg: "{{item}}"
+    state: present
+  with_items: "{{ build_required_packages }}"
+  become: yes
+  tags:
+    - installation
+
+- name: " {{ ansible_distribution }} | Git clone from {{ git_repo }} --> {{ git_branch }}"
+  git:
+    repo: "{{git_repo}}"
+    dest: /tmp/openjdk
+    version: "{{git_branch}}"
+    depth: 1
+    force: yes
+  become: yes
+  tags:
+    - installation
+
+- name: "{{ ansible_distribution }} | set permission to configure "
+  file:
+    path: /tmp/openjdk/configure
+    mode: 0755
+
+- name: "{{ ansible_distribution }} | configure openjdk project "
+  shell: ./configure --with-target-bits=64 --with-freetype-include=/usr/include/freetype2/ --with-freetype-lib=/usr/lib/x86_64-linux-gnu --with-user-release-suffix=ShannaraJVMb01 --with-debug-level=slowdebug --enable-ccache --with-boot-jdk-jvmargs="-Xlint:deprecation -Xlint:unchecked" 2>&1 | tee /tmp/configure_openjdk8.log 
+  args:
+    chdir: /tmp/openjdk
+    executable: /bin/bash
+
+- name: "{{ ansible_distribution }} | make openjdk images "
+  shell: make images CONF=linux-x86_64-normal-server-slowdebug
+  args:
+    chdir: /tmp/openjdk
+    executable: /bin/bash
+
+- name: "{{ ansible_distribution }} | show built openjdk version "
+  shell: build/linux-x86_64-normal-server-slowdebug/jdk/bin/java -version
+  args:
+    chdir: /tmp/openjdk
+    executable: /bin/bash

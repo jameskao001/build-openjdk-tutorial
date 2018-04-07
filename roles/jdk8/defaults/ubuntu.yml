@@ -1,0 +1,28 @@
+build_required_packages:
+  - git 
+  - zip 
+  - bzip2 
+  - unzip 
+  - tar 
+  - curl
+  - ccache 
+  - make 
+  - cmake 
+  - gcc 
+  - g++ 
+  - ca-certificates 
+  - ca-certificates-java
+    #X11 header
+  - libx11-dev 
+  - libxext-dev 
+  - libxrender-dev 
+  - libxtst-dev 
+  - libxt-dev
+    #
+  - libasound2-dev 
+  - libcups2-dev 
+    # Freetype
+  - libfreetype6-dev
+  - build-essential
+    # bootstrap jdk
+  - openjdk-8-jdk 
