@@ -1,9 +1,10 @@
-#
+# ansible-playbook
 ---
-- hosts: localhost
+- hosts: centos6
   gather_facts: yes
   vars:
     - git_repo : https://github.com/dmlloyd/openjdk.git
     - git_branch: jdk8u/jdk8u
   roles:
-    - jdk8  
+    - jdk8
+  
