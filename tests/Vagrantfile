@@ -49,6 +49,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Ansible.
     centos6.vm.provision "ansible" do |ansible|
       ansible.playbook = "test-jdk8-centos6.yml"
+      ansible.verbose = "v"
     end
   end
 

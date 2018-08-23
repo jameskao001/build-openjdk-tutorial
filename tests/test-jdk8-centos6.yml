@@ -1,0 +1,16 @@
+# ansible-playbook
+---
+- hosts: centos6
+  gather_facts: yes
+  vars:
+    - git_repo : https://github.com/dmlloyd/openjdk.git
+    - git_branch: jdk8u/jdk8u
+    - released_jvm_name: ShannaraJDK
+    - released_build_number: b02
+    - configure_target_bits: 64
+    - configure_debug_level: slowdebug
+    - configure_jdk_variant: normal
+    - configure_jvm_variants: server
+  roles:
+    - jdk8
+  
