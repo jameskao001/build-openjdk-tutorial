@@ -10,7 +10,7 @@
 - name: " {{ ansible_distribution }} | Git clone from {{ git_repo }} --> {{ git_branch }}"
   git:
     repo: "{{git_repo}}"
-    dest: /tmp/openjdk
+    dest: "{{ lookup('env','TMPDIR') }}"/openjdk
     version: "{{git_branch}}"
     depth: 1
     force: yes
@@ -20,16 +20,16 @@
 
 - name: "{{ ansible_distribution }} | set permission to configure "
   file:
-    path: /tmp/openjdk/configure
+    path: "{{ lookup('env','TMPDIR') }}"/openjdk/configure
     mode: 0755
   become: yes
   tags:
     - installation
 
 - name: "{{ ansible_distribution }} | configure openjdk project "
-  shell: "./configure --with-target-bits={{ configure_target_bits }} --with-debug-level={{ configure_debug_level }} --with-jdk-variant={{ configure_jdk_variant }} --with-jvm-variants={{ configure_jvm_variants }} --with-freetype-include=/usr/include/freetype2/ --with-freetype-lib=/usr/lib/x86_64-linux-gnu --with-user-release-suffix={{ released_jvm_name }} --with-build-number={{ released_build_number }} --enable-ccache  --with-boot-jdk-jvmargs='-Xlint:deprecation -Xlint:unchecked' 2>&1 | tee /tmp/configure_openjdk8.log"
+  shell: "./configure --with-target-bits={{ configure_target_bits }} --with-debug-level={{ configure_debug_level }} --with-jdk-variant={{ configure_jdk_variant }} --with-jvm-variants={{ configure_jvm_variants }} --with-freetype-include=/usr/include/freetype2/ --with-freetype-lib=/usr/lib/x86_64-linux-gnu --with-user-release-suffix={{ released_jvm_name }} --with-build-number={{ released_build_number }} --enable-ccache  --with-boot-jdk-jvmargs='-Xlint:deprecation -Xlint:unchecked' 2>&1 | tee {{ lookup('env','TMPDIR') }}/configure_openjdk8.log"
   args:
-    chdir: /tmp/openjdk
+    chdir: "{{ lookup('env','TMPDIR') }}"/openjdk
     executable: /bin/bash
   become: yes
   tags:
@@ -39,7 +39,7 @@
   shell: "make clean CONF=linux-x86_64-{{ configure_jdk_variant }}-{{ configure_jvm_variants }}-{{ configure_debug_level }}"
   ignore_error: yes
   args:
-    chdir: /tmp/openjdk
+    chdir: "{{ lookup('env','TMPDIR') }}"/openjdk
     executable: /bin/bash
   become: yes
   tags:
@@ -48,7 +48,7 @@
 - name: "{{ ansible_distribution }} | make openjdk images "
   shell: "make images CONF=linux-x86_64-{{ configure_jdk_variant }}-{{ configure_jvm_variants }}-{{ configure_debug_level }}"
   args:
-    chdir: /tmp/openjdk
+    chdir: "{{ lookup('env','TMPDIR') }}"/openjdk
     executable: /bin/bash
   become: yes
   tags:
@@ -57,7 +57,7 @@
 - name: "{{ ansible_distribution }} | show built openjdk version "
   shell: build/linux-x86_64-normal-server-slowdebug/jdk/bin/java -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+PrintFlagsFinal -version
   args:
-    chdir: /tmp/openjdk
+    chdir: "{{ lookup('env','TMPDIR') }}"/openjdk
     executable: /bin/bash
   become: yes
   tags:

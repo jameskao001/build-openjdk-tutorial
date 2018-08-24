@@ -3,6 +3,8 @@
 sudo: required
 
 env:
+  global:
+    - TMPDIR=$TRAVIS_BUILD_DIR/tmp    
   # Provide a list of OSes we want to use for testing.
   #- distro: centos7
   #  init: /usr/lib/systemd/systemd
