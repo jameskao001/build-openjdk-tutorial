@@ -3,8 +3,6 @@
 sudo: required
 
 env:
-  global:
-  - TMPDIR=$TRAVIS_BUILD_DIR/tmp    
   # Provide a list of OSes we want to use for testing.
   #- distro: centos7
   #  init: /usr/lib/systemd/systemd
@@ -37,6 +35,7 @@ script:
   # Configure test script so we can run extra tests after playbook is run.
   - export container_id=$(date +%s)
   - export cleanup=false
+  - export TMPDIR=$TRAVIS_BUILD_DIR/tmp    
 
   # Download test shim.
   - wget -O ${PWD}/tests/test.sh https://gist.githubusercontent.com/geerlingguy/73ef1e5ee45d8694570f334be385e181/raw/
