@@ -43,5 +43,5 @@ script:
   - chmod +x ${PWD}/tests/test.sh
 
   # Run tests.
-  - ${PWD}/tests/test.sh
+  - travis_wait 30 ${PWD}/tests/test.sh
 
