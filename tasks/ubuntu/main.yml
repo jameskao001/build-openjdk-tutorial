@@ -7,14 +7,14 @@
   tags:
     - installation
 
-- name: "Check HOME environment variable"
+- name: "Check TRAVIS_BUILD_DIR environment variable"
   debug: 
-    msg: "HOME = {{ lookup('env','HOME') }}"
+    msg: "TRAVIS_BUILD_DIR = {{ lookup('env','TRAVIS_BUILD_DIR') }}"
 
 - name: " {{ ansible_distribution }} | Git clone from {{ git_repo }} --> {{ git_branch }}"
   git:
     repo: "{{git_repo}}"
-    dest: "{{ lookup('env','HOME') }}/openjdk"
+    dest: "{{ lookup('env','TRAVIS_BUILD_DIR') }}/openjdk"
     version: "{{git_branch}}"
     depth: 1
     force: yes
@@ -24,16 +24,16 @@
 
 - name: "{{ ansible_distribution }} | set permission to configure "
   file:
-    path: "{{ lookup('env','HOME') }}/openjdk/configure"
+    path: "{{ lookup('env','TRAVIS_BUILD_DIR') }}/openjdk/configure"
     mode: 0755
   become: yes
   tags:
     - installation
 
 - name: "{{ ansible_distribution }} | configure openjdk project "
-  shell: "./configure --with-target-bits={{ configure_target_bits }} --with-debug-level={{ configure_debug_level }} --with-jdk-variant={{ configure_jdk_variant }} --with-jvm-variants={{ configure_jvm_variants }} --with-freetype-include=/usr/include/freetype2/ --with-freetype-lib=/usr/lib/x86_64-linux-gnu --with-user-release-suffix={{ released_jvm_name }} --with-build-number={{ released_build_number }} --enable-ccache  --with-boot-jdk-jvmargs='-Xlint:deprecation -Xlint:unchecked' 2>&1 | tee {{ lookup('env','HOME') }}/configure_openjdk8.log"
+  shell: "./configure --with-target-bits={{ configure_target_bits }} --with-debug-level={{ configure_debug_level }} --with-jdk-variant={{ configure_jdk_variant }} --with-jvm-variants={{ configure_jvm_variants }} --with-freetype-include=/usr/include/freetype2/ --with-freetype-lib=/usr/lib/x86_64-linux-gnu --with-user-release-suffix={{ released_jvm_name }} --with-build-number={{ released_build_number }} --enable-ccache  --with-boot-jdk-jvmargs='-Xlint:deprecation -Xlint:unchecked' 2>&1 | tee {{ lookup('env','TRAVIS_BUILD_DIR') }}/configure_openjdk8.log"
   args:
-    chdir: "{{ lookup('env','HOME') }}/openjdk"
+    chdir: "{{ lookup('env','TRAVIS_BUILD_DIR') }}/openjdk"
     executable: /bin/bash
   become: yes
   tags:
@@ -43,7 +43,7 @@
   shell: "make clean CONF=linux-x86_64-{{ configure_jdk_variant }}-{{ configure_jvm_variants }}-{{ configure_debug_level }}"
   ignore_error: yes
   args:
-    chdir: "{{ lookup('env','HOME') }}/openjdk"
+    chdir: "{{ lookup('env','TRAVIS_BUILD_DIR') }}/openjdk"
     executable: /bin/bash
   when: is_cleaning_img_conf is defined and is_cleaning_img_conf == true
   become: yes
@@ -53,7 +53,7 @@
 - name: "{{ ansible_distribution }} | make openjdk images "
   shell: "make images CONF=linux-x86_64-{{ configure_jdk_variant }}-{{ configure_jvm_variants }}-{{ configure_debug_level }}"
   args:
-    chdir: "{{ lookup('env','HOME') }}/openjdk"
+    chdir: "{{ lookup('env','TRAVIS_BUILD_DIR') }}/openjdk"
     executable: /bin/bash
   become: yes
   tags:
@@ -62,7 +62,7 @@
 - name: "{{ ansible_distribution }} | show built openjdk version "
   shell: build/linux-x86_64-normal-server-slowdebug/jdk/bin/java -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+PrintFlagsFinal -version
   args:
-    chdir: "{{ lookup('env','HOME') }}/openjdk"
+    chdir: "{{ lookup('env','TRAVIS_BUILD_DIR') }}/openjdk"
     executable: /bin/bash
   become: yes
   tags:
