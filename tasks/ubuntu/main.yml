@@ -7,6 +7,10 @@
   tags:
     - installation
 
+- name: "Check TMPDIR environment variable"
+  debug: 
+    msg: "TMPDIR = {{ lookup('env','TMPDIR') }}"
+
 - name: " {{ ansible_distribution }} | Git clone from {{ git_repo }} --> {{ git_branch }}"
   git:
     repo: "{{git_repo}}"
