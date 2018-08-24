@@ -1,5 +1,15 @@
 ---
 - hosts: all
+  gather_facts: yes 
+  vars:
+    - git_repo : https://github.com/dmlloyd/openjdk.git
+    - git_branch: jdk8u/jdk8u
+    - released_jvm_name: ShannaraJDK
+    - released_build_number: b02 
+    - configure_target_bits: 64
+    - configure_debug_level: slowdebug
+    - configure_jdk_variant: normal
+    - configure_jvm_variants: server
 
   pre_tasks:
     - name: Update apt cache.
@@ -7,15 +17,6 @@
       when: ansible_os_family == 'Debian'
       changed_when: False
 
-    # See: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=863199
-    - name: Ensure 'man' directory exists.
-      file:
-        path: /usr/share/man/man1
-        state: directory
-        recurse: True
-      when:
-        - ansible_distribution == 'Ubuntu'
-        - ansible_distribution_version == '18.04'
 
   roles:
     - role_under_test
