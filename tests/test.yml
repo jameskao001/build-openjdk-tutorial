@@ -10,6 +10,7 @@
     - configure_debug_level: slowdebug
     - configure_jdk_variant: normal
     - configure_jvm_variants: server
+    - is_cleaning_img_conf: false
 
   pre_tasks:
     - name: Update apt cache.

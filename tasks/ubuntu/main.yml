@@ -41,6 +41,7 @@
   args:
     chdir: "{{ lookup('env','TMPDIR') }}/openjdk"
     executable: /bin/bash
+  when: is_cleaning_img_conf is defined and is_cleaning_img_conf == true
   become: yes
   tags:
     - installation
