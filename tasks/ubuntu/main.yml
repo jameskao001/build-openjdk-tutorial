@@ -50,6 +50,15 @@
   tags:
     - installation
 
+- name: "Find {{ lookup('env','SETUP_HOME') }}/openjdk all directories"
+  find:
+    paths: "{{ lookup('env','SETUP_HOME') }}/openjdk"
+    recurse: yes
+    file_type: directory
+  become: yes
+  tags:
+    - installation
+
 - name: "{{ ansible_distribution }} | make openjdk images "
   shell: "make images CONF=linux-x86_64-{{ configure_jdk_variant }}-{{ configure_jvm_variants }}-{{ configure_debug_level }}"
   args:
