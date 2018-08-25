@@ -38,3 +38,5 @@ script:
   # Run tests.
   - travis_wait 30 ${PWD}/tests/test.sh
 
+after_failure:
+  - docker logs $container_id 
