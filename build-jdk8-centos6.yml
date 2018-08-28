@@ -1,0 +1,9 @@
+#
+---
+- hosts: localhost
+  gather_facts: yes
+  vars:
+    - git_repo : https://github.com/dmlloyd/openjdk.git
+    - git_branch: jdk8u/jdk8u
+  roles:
+    - jdk8  
