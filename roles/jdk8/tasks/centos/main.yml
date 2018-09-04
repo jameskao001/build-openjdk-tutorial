@@ -7,13 +7,52 @@
   tags:
     - installation
 
+- name: " {{ ansible_distribution }} | hg clone from {{ hg_repo }} --> {{ hg_revision }}"
+  hg:
+    repo: "{{ hg_repo }}"
+    dest: "{{ installed_openjdk_home }}"
+    revision: "{{ hg_revision }}"
+    force: yes
+  when: 
+    - hg_repo is defined 
+    - hg_revision is defined 
+  become: yes
+  tags:
+    - installation
+
+- name: "{{ ansible_distribution }} | set permission to get_source.sh "
+  file:
+    path: "{{ installed_openjdk_home }}/get_source.sh"
+    mode: 0755
+  when: 
+    - hg_repo is defined 
+    - hg_revision is defined 
+  become: yes
+  tags:
+    - installation
+
+- name: "{{ ansible_distribution }} | get_source.sh "
+  shell: "./get_source.sh"
+  args:
+    chdir: "{{ installed_openjdk_home }}"
+    executable: /bin/bash
+  when: 
+    - hg_repo is defined 
+    - hg_revision is defined 
+  become: yes
+  tags:
+    - installation
+
 - name: " {{ ansible_distribution }} | Git clone from {{ git_repo }} --> {{ git_branch }}"
   git:
-    repo: "{{git_repo}}"
+    repo: "{{ git_repo }}"
     dest: "{{ installed_openjdk_home }}"
-    version: "{{git_branch}}"
+    version: "{{ git_branch }}"
     depth: 1
     force: yes
+  when: 
+    - git_repo is defined 
+    - git_branch is defined 
   become: yes
   tags:
     - installation
@@ -54,8 +93,8 @@
   tags:
     - installation
 
-- name: "{{ ansible_distribution }} | show built openjdk version "
-  shell: build/linux-x86_64-normal-server-slowdebug/jdk/bin/java -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+PrintFlagsFinal -version
+- name: "{{ ansible_distribution }} | show built java version "
+  shell: "build/linux-x86_64-{{ configure_jdk_variant }}-{{ configure_jvm_variants }}-{{ configure_debug_level }}/jdk/bin/java -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions -XX:+PrintFlagsFinal -version"
   args:
     chdir: "{{ installed_openjdk_home }}"
     executable: /bin/bash

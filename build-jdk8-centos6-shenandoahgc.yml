@@ -3,6 +3,7 @@
 - hosts: localhost
   gather_facts: yes
   vars:
+    - installed_openjdk_home: /data/openjdk-shenandoah
     - hg_repo: http://hg.openjdk.java.net/shenandoah/jdk8u
     - hg_revision: jdk8u172-b10
     - released_jvm_name: RuckusJDK

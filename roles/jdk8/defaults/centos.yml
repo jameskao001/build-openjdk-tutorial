@@ -29,4 +29,3 @@ build_required_packages:
   - java-1.8.0-openjdk-devel
   - rpm-build 
   - gpg
-installed_openjdk_home: /data/openjdk
